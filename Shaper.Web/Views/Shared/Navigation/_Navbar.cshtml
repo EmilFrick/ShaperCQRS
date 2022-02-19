@@ -1,0 +1,41 @@
+﻿@inject IHttpContextAccessor contextAcc
+
+<div style="margin-bottom:20vh;">
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light indigo border-bottom box-shadow mb-5">
+    <div class="container-fluid">
+        <i class="bi bi-circle-square shaper-logo"></i>&nbsp;&nbsp;&nbsp;</i>
+        <a class="mx-2 shaper-logo me-5" asp-area="User" asp-controller="Home" asp-action="Index">Shaper</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+
+                <li class="nav-item mx-4 texteffect">
+                    <a class="nav-link text-light" asp-area="User" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <div class="indigo-light-border"></div>
+                @if (contextAcc.HttpContext.Session.GetString("JwToken") != null && contextAcc.HttpContext.Session.GetString("JwToken").ToString().Length > 0)
+                {
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <partial name="Navigation/_NavAdmin" />
+                    }
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <partial name="Navigation/_NavCustomer" />
+                    }
+                    @if (User.IsInRole("Artist"))
+                    {
+                        <partial name="Navigation/_NavArtist" />
+                    }
+                }
+
+                <partial name="Navigation/_NavIdentity" />
+            </ul>
+        </div>
+
+    </div>
+</nav>
+</div>

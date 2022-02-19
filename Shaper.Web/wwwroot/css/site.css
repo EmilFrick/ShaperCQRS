@@ -1,0 +1,197 @@
+
+.shaper-logo {
+    font-size: 24px;
+    color: #E0CFFC;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.shaper-container {
+    border-radius: 10px;
+    margin-left: 30vh;
+    margin-right: 30vh;
+    padding: 20px 40px;
+    background-color: indigo;
+}
+
+.shaper-productdisplay-baground {
+    background-color: indigo;
+    min-height: 950px;
+    position: relative;
+    top: -100px;
+}
+
+.shaper-productdisplay-layer {
+    background-color: #E0CFFC;
+    height: 40vh;
+    border-radius: 0px 2000px 0px 0px;
+    position: relative;
+    top: 200px;
+}
+
+.shaper-card {
+    background: #FC5801;
+}
+
+.shoppingcart-container {
+    border-radius: 10px;
+    background-color: indigo;
+}
+
+.shaper-marketplace-container {
+    min-height: 900px;
+    border-radius: 10px;
+    margin-left: 30vh;
+    margin-right: 30vh;
+    padding: 20px 40px;
+    background-color: indigo;
+}
+
+.shaper-orderdetails-container {
+    min-height: 900px;
+    border-radius: 10px;
+    margin-left: 20vh;
+    margin-right: 20vh;
+    padding: 20px 40px;
+    background-color: indigo;
+}
+
+
+.shoppingcart-pricetag {
+    border-radius: 10px;
+    padding: 10px;
+    position: relative;
+    top: -100px;
+}
+
+.shaper-textbox-colors {
+    background: #E0CFFC;
+    color: indigo;
+    padding: 3px 3px 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.shaper-trash {
+    font-size: 36px;
+    margin-left: 35px;
+}
+
+.shaper-title {
+    margin-left: 30vh;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    border-left: dotted 9px indigo;
+}
+
+.shaper-login-baground {
+    background-color: #E0CFFC;
+    padding-top: 10px;
+    height: 80vh;
+    border-radius: 0px 2000px 0px 0px;
+}
+
+.indigo {
+    background-color: indigo;
+}
+
+.indigo-light-text {
+    color: #E0CFFC;
+}
+
+.indigo-light-border {
+    border-right: 5px dotted;
+    border-color: #E0CFFC;
+}
+
+.texteffect {
+    position: relative;
+    top: 0;
+    transition: top ease 0.5s;
+}
+
+    .texteffect:hover {
+        top: -10px;
+    }
+
+.shaper-hover:hover {
+    border-bottom: solid 4px black;
+    border-right: solid 4px black;
+}
+
+.shaper-hover:hover {
+    background: #ff8b4e;
+}
+
+a.shaper-logo:hover {
+    color: #E0CFFC;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
+}
+
+label {
+    color: #E0CFFC;
+}
+
+span {
+    color: red;
+}
+
+/*ComponentDetails*/
+.detail-button {
+    color: #E0CFFC;
+    background-color: indigo;
+    border: solid 2px white;
+}
+
+.content-box {
+    background-color: #F8F9FA;
+    border-radius: 10px;
+    padding: 13px;
+}
+
+.shaper-center {
+    /*text-align: center;*/
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lineheight-tight {
+    line-height: 0.5;
+}
+
+.shaper-linebreak {
+    border-bottom: solid 3px white;
+}
+
+.shaper-quantity-control {
+    font-size: 24px;
+}
+
+a .shaper {
+    text-decoration: none;
+    color: #F8F9FA;
+}
+
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+}
+
+.shaper-underline {
+    text-decoration: underline;
+    color: #F8F9FA;
+}
+
+    .shaper-underline:hover {
+        color: #E0CFFC;
+    }
+
+.shaper-quantity-indicator {
+    background-color: forestgreen;
+    display:inline-block;
+    position:relative;
+    left: 90%;
+    top: -30px;
+}

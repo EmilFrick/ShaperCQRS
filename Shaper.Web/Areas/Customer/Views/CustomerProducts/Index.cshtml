@@ -1,0 +1,43 @@
+﻿@model ProductCustomerIndexVM
+
+@{
+    var formtype = "Filter";
+}
+
+@if (Model != null)
+{
+    <div class="shaper-marketplace-container">
+        <div class="row pt-4 mb-5">
+            <div class="col-3 text-end">
+                <form method="post">
+                    <label>Filter by Color:</label>
+                    <select asp-for="ColorIdFilter" asp-items="@Model.Colors" class="form-control">
+                        <option disabled selected>--Select Color--</option>
+                    </select>
+                    <div class="text-end">
+                        <partial name="Buttons/_Confirm" model="formtype" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="row mt-5">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-4">
+                    <a asp-action="Details" asp-route-id="@product.Id" >
+                        <partial name="Components/_MarketplaceProductCard" model="@product">
+                    </a>
+                </div>
+            }
+        </div>
+
+
+    </div>
+
+}
+else
+{
+    <p>No products found</p>
+}

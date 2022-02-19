@@ -1,0 +1,35 @@
+﻿@model IEnumerable<OrderEntryVM>
+
+
+<div style="margin-left:auto">
+
+    @foreach (var order in Model)
+    {
+        <a asp-action="Details" asp-route-id="@order.Id">
+
+            <div class="row indigo m-2 " style="width:1000px;">
+                <div class="col-3 pt-3">
+                    <p class="shaper">
+                        @order.OrderDate
+                    </p>
+                </div>
+                <div class="col-3 pt-3">
+                    <p class="shaper">
+                        @order.OrderValue SEK
+                    </p>
+                </div>
+                <div class="col-3 pt-3">
+                    <p class="shaper">
+                        @order.AmountOfArticles Articles
+                    </p>
+                </div>
+                <div class="col-3 pt-3">
+                    <p class="shaper-underline">
+                        SEE MORE
+                    </p>
+                </div>
+            </div>
+        </a>
+    }
+</div>
+

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ColorDisplayVM>
+
+@if (Model != null)
+{
+    <div class="container">
+        <div class="row pt-4 my-2">
+            <div class="col-4">
+                <h2 class="text-primary">Color List</h2>
+            </div>
+            <div class="col-8 text-end">
+                <a asp-action="Upsert" class="btn btn-primary"><i class="bi bi-folder-plus">&nbsp; New Color</i></a>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>@nameof(Color.Name)</th>
+                    <th>@nameof(Color.Hex)</th>
+                    <th>@nameof(Color.AddedValue)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var color in Model)
+                {
+                    <tr>
+                        <td>@color.Name</td>
+                        <td>@color.Hex</td>
+                        <td>@color.AddedValue</td>
+                        <td>
+                            <div class="w-100 btn-group" role="group">
+                                <a asp-action="Upsert" asp-route-id="@color.Id" class="btn btn-primary mx-1"><i class="bi bi-pencil-square"></i>&nbsp;&nbsp;Edit</a>
+                                <form method="post">
+                                    <button type="submit" asp-action="Delete" asp-route-id="@color.Id" class="btn btn-secondary"><i class="bi bi-x-circle"></i>&nbsp;&nbsp;Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>No colors found</p>
+}

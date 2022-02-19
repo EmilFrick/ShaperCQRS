@@ -1,0 +1,18 @@
+﻿@model ProductDisplayVM
+@{
+    ColorComponentModel colorcomponent = new() { Name = Model.Color.Name, Hex = Model.Color.Hex };
+    ShapeComponentModel shapecomponent = new() { Name = Model.Shape.Name.ToLower(), HasFrame = Model.Shape.HasFrame };
+    TransparencyComponentModel transparencycomponent = new() { Name = Model.Transparency.Name, TransparencyValue = Model.Transparency.Value, Description = Model.Transparency.Description };
+    ShaperModel shapercomponent = new();
+}
+<div class="shaper-productdisplay-baground">
+    <div class="shaper-productdisplay-layer">
+        <div class="shaper-center col-md-6 offset-md-3" style="width:600px; position: relative;top: -100px;">
+            <partial name="Components/_DetailProductCard" model="@Model">
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/js/quantity.js"></script>
+}

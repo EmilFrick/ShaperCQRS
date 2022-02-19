@@ -1,0 +1,36 @@
+﻿@model OrderDetail
+@{
+    ColorComponentModel colorcomponent = new() { Name = Model.ColorName, Hex = Model.ColorHex };
+    ShapeComponentModel shapecomponent = new() { Name = Model.ShapeName.ToLower(), HasFrame = Model.ShapeHasFrame };
+    TransparencyComponentModel transparencycomponent = new() { Name = Model.TransparencyName, TransparencyValue = Model.TransparencyValue, Description = Model.TransparencyDescription };
+    ShaperModel shapercomponent = new();
+}
+
+<div class="shaper-card" style=" padding:10px; border-radius:10px;">
+    <div id="quantity-circle" class="shaper-quantity-indicator text-center">
+        <h3 class = "mt-3" style="font-weight:900;">@($"{Model.ProductQuantity}X")</h3>
+    </div>
+    <div class="shaper-center">
+        @{
+            shapercomponent.Color = @colorcomponent.Hex.GetRGBA(transparencycomponent.TransparencyValue);
+            shapercomponent.HasFrame = shapecomponent.HasFrame;
+            shapercomponent.Shape = shapecomponent.Name;
+        }
+        <div class="content-box">
+            <partial name="Components/_ShaperComponent" model="shapercomponent" />
+        </div>
+        <div class="shaper-textbox-colors mt-3">
+            <p>Unitprice: @Model.ProductUnitPrice SEK</p>
+            <p class="text-danger">Total Cost: @Model.EntryTotalValue SEK</p>
+        </div>
+        <div class="shaper-textbox-colors mt-3">
+            <partial name="Components/_ColorComponent" model="@colorcomponent" />
+        </div>
+        <div class="shaper-textbox-colors">
+            <partial name="Components/_ShapeComponent" model="@shapecomponent" />
+        </div>
+        <div class="shaper-textbox-colors">
+            <partial name="Components/_TransparencyComponent" model="@transparencycomponent" />
+        </div>
+    </div>
+</div>
