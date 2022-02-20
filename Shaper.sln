@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaper.Web", "Shaper.Web\Shaper.Web.csproj", "{CB8CF3E7-F170-4FBC-AD2F-A6D2FE6F6EB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaper.API", "Shaper.API\Shaper.API.csproj", "{A01C72A8-7877-44D6-A241-D434990BDFCD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{84B03CF8-3332-4495-8C40-88735B3C252B} = {84B03CF8-3332-4495-8C40-88735B3C252B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaper.DataAccess", "Shaper.DataAccess\Shaper.DataAccess.csproj", "{271ADE44-77A8-4A15-A691-D0AE6FE04F13}"
 EndProject

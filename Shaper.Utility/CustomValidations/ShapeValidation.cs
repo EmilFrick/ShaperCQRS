@@ -27,7 +27,7 @@ namespace Shaper.Utility.CustomValidations
             }
             if (!match)
             {
-                return new ValidationResult("You need to provide a valid shape");
+                return new ValidationResult("The Shape you've provided is not Valid. The Valid Shapes are: square, rectangle, circle, oval, triangleup, triangledown, triangleleft, triangleright, triangletopleft, triangletopright, trianglebottomleft, trianglebottomright, trapezoid, cone");
             }
             return null;
         }

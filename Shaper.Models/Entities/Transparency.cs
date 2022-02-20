@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Shaper.Models.Models.TransparencyModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,5 +29,20 @@ namespace Shaper.Models.Entities
         //Navigation
         [ValidateNever]
         public ICollection<Product> Products { get; set; }
+
+        public Transparency()
+        {
+
+        }
+
+        public Transparency(TransparencyCreateModel model)
+        {
+            Name = model.Name;
+            if(model.Description != null)
+                Description = model.Description;
+            
+            Value = model.Value;
+            AddedValue = model.AddedValue;
+        }
     }
 }

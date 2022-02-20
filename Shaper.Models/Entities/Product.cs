@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Shaper.Models.Models.ProductModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -49,5 +50,21 @@ namespace Shaper.Models.Entities
         [ValidateNever]
         public ICollection<CartProduct> CartProducts { get; set; }
 
+
+        public Product()
+        {
+
+        }
+
+        public Product(ProductCreateModel Model)
+        {
+            Name = Model.Name;
+            Description = Model.Description;
+            Artist = Model.Artist;
+            Created = Model.Created;
+            ColorId = Model.ColorId;
+            ShapeId = Model.ShapeId;
+            TransparencyId = Model.TransparencyId;
+        }
     }
 }

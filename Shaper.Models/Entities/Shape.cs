@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Shaper.Models.Models.ColorModels;
+using Shaper.Models.Models.ShapeModels;
 using Shaper.Utility.CustomValidations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,5 +34,18 @@ namespace Shaper.Models.Entities
         //Navigation
         [ValidateNever]
         public ICollection<Product> Products { get; set; }
+
+
+        public Shape()
+        {
+
+        }
+
+        public Shape(ShapeCreateModel model)
+        {
+            Name = model.Name;
+            HasFrame = model.HasFrame;
+            AddedValue = model.AddedValue;
+        }
     }
 }

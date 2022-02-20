@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shaper.API.CQRS.ColorData.Commands;
+using Shaper.API.CQRS.ColorData.Queries;
+using Shaper.API.CQRS.ProductData.Commands;
 using Shaper.DataAccess.Context;
 using Shaper.DataAccess.Repo;
 using Shaper.DataAccess.Repo.IRepo;
@@ -14,27 +18,28 @@ using Color = Shaper.Models.Entities.Color;
 namespace Shaper.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     public class ColorsController : ControllerBase
     {
 
-        private readonly IUnitOfWork _db;
+        private readonly IMediator _mediator;
 
-        public ColorsController(IUnitOfWork db)
+
+        public ColorsController(IMediator mediator)
         {
-            _db = db;
+            _mediator = mediator;
         }
 
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetColors()
         {
-            var result = await _db.Colors.GetAllAsync(includeProperties: "Products");
+
+            var result = await _mediator.Send(new ReadColorsQuery());
             if (result == null)
-            {
                 return NotFound();
-            }
+
             return Ok(result);
         }
 
@@ -42,11 +47,10 @@ namespace Shaper.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetColor(int id)
         {
-            var result = await _db.Colors.GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "Products");
+            var result = await _mediator.Send(new ReadColorQuery(x => x.Id == id));
             if (result == null)
-            {
                 return NotFound();
-            }
+
             return Ok(result);
         }
 
@@ -55,82 +59,55 @@ namespace Shaper.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _db.Colors.GetFirstOrDefaultAsync(x => x.Name == color.Name || x.Hex == color.Hex);
+                var result = await _mediator.Send(new ReadColorQuery(x => x.Name == color.Name || x.Hex == color.Hex));
                 if (result is not null)
-                {
-                    return Conflict(result);
-                }
+                    return Conflict(new { message = "The Color youre tying to add already exists. Check 'Color Name' and 'Color Hex'." });
 
-                Color addColor = color.GetColorFromCreateVM();
-                await _db.Colors.AddAsync(addColor);
-                await _db.SaveAsync();
-
-                return CreatedAtAction("GetColor", new { id = addColor.Id }, addColor);
+                var addedColor = await _mediator.Send(new CreateColorCommand(color));
+                return CreatedAtAction("GetColor", new { id = addedColor.Id }, addedColor);
             }
             else
-            {
                 return BadRequest();
-            }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateColor(int id, ColorUpdateModel color)
         {
             if (color.Id != id)
-            {
                 return BadRequest();
-            }
+
             if (ModelState.IsValid)
             {
-                Color conflict = await _db.Colors.GetFirstOrDefaultAsync(x => x.Id != color.Id && x.Hex == color.Hex ||
-                                                                          x.Id != color.Id && x.Name == color.Name);
-                if (conflict is not null)
-                {
-                    var feedback = new ColorUpdateModel(conflict);
-                    return Conflict(feedback);
-                }
+                var conflictingColor = await _mediator.Send(new ReadColorQuery(x => x.Id != color.Id && x.Hex == color.Hex || x.Id != color.Id && x.Name == color.Name));
+                
+                if (conflictingColor is not null)
+                    return Conflict(new ColorUpdateModel(conflictingColor));
 
-                Color c = color.GetColorFromUpdateVM();
-                _db.Colors.Update(c);
-                await _db.SaveAsync();
+                var updatedColor = await _mediator.Send(new UpdateColorCommand(color));
 
-                var productsAssociated = await _db.Products.GetProductsAssociatedWith(c);
-                if (productsAssociated.Count > 0)
-                {
-                    _db.Products.EvaluateProductPrices(productsAssociated);
-                    _db.Products.UpdateProductPrices(productsAssociated);
-                }
-
-
+                if (updatedColor.Products.Count > 0)
+                    await _mediator.Send(new AdjustProductPricesCommand(x => x.Color.Id == updatedColor.Id));
+                
                 return Ok();
             }
             else
-            {
                 return BadRequest();
-            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteColor(int id)
         {
-            var color = await _db.Colors.GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "Products");
-
-            if (color is not null || color.Name == "Default")
-
+            var color = await _mediator.Send(new ReadColorQuery(x => x.Id == id));
+            if (color is not null || color.Name is not "Default")
             {
                 if (color.Products?.Count > 0)
-                {
-                    await _db.Colors.CheckDefaultColorAsync();
-                    await _db.Products.RebuildingProductsAsync(color);
-                }
-                _db.Colors.Remove(color);
-                await _db.SaveAsync();
+                    await _mediator.Send(new RemovedColorUpdateProductsCommand(id));
+
+                var deletedColor = await _mediator.Send(new DeleteColorCommand(id));
                 return Ok();
             }
             else
-            {
                 return BadRequest();
-            }
         }
     }
 }

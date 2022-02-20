@@ -55,10 +55,6 @@ namespace Shaper.Models.Models.ProductModels
                 ShapeId = productVM.ShapeId,
                 TransparencyId = productVM.TransparencyId
             };
-
-
-
         }
-
     }
 }

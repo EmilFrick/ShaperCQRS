@@ -1,34 +1,42 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shaper.API.CQRS.TransparencyData.Commands;
+using Shaper.API.CQRS.TransparencyData.Queries;
+using Shaper.API.CQRS.ProductData.Commands;
 using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Entities;
+using Shaper.Models.Models.TransparencyModels;
 using Shaper.Models.Models.TransparencyModels;
 using System.Data;
 
 namespace Shaper.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     public class TransparenciesController : ControllerBase
     {
         private readonly IUnitOfWork _db;
+        private readonly IMediator _mediator;
 
-        public TransparenciesController(IUnitOfWork db)
+
+        public TransparenciesController(IUnitOfWork db, IMediator mediator)
         {
             _db = db;
+            _mediator = mediator;
         }
 
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetTransparencies()
         {
-            var result = await _db.Transparencies.GetAllAsync(includeProperties: "Products");
+
+            var result = await _mediator.Send(new ReadTransparenciesQuery());
             if (result == null)
-            {
                 return NotFound();
-            }
+
             return Ok(result);
         }
 
@@ -36,11 +44,10 @@ namespace Shaper.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetTransparency(int id)
         {
-            var result = await _db.Transparencies.GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "Products");
+            var result = await _mediator.Send(new ReadTransparencyQuery(x => x.Id == id));
             if (result == null)
-            {
                 return NotFound();
-            }
+
             return Ok(result);
         }
 
@@ -49,80 +56,55 @@ namespace Shaper.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _db.Transparencies.GetFirstOrDefaultAsync(x => x.Name == transparency.Name || x.Value == transparency.Value);
+                var result = await _mediator.Send(new ReadTransparencyQuery(x => x.Name == transparency.Name || x.Value == transparency.Value));
                 if (result is not null)
-                {
-                    return Conflict(result);
-                }
+                    return Conflict(new { message = "The Transparency youre tying to add already exists. Check 'Transparency Name' and 'Transparency Hex'." });
 
-                Transparency addTransparency = transparency.GetTransparencyFromCreateVM();
-                await _db.Transparencies.AddAsync(addTransparency);
-                await _db.SaveAsync();
-
-                return CreatedAtAction("GetTransparency", new { id = addTransparency.Id }, addTransparency);
+                var addedTransparency = await _mediator.Send(new CreateTransparencyCommand(transparency));
+                return CreatedAtAction("GetTransparency", new { id = addedTransparency.Id }, addedTransparency);
             }
             else
-            {
                 return BadRequest();
-            }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateTransparency(int id, TransparencyUpdateModel transparency)
         {
             if (transparency.Id != id)
-            {
                 return BadRequest();
-            }
+
             if (ModelState.IsValid)
             {
-                Transparency conflict = await _db.Transparencies.GetFirstOrDefaultAsync(x => x.Id != transparency.Id && x.Name == transparency.Name ||
-                                                                                        x.Id != transparency.Id && x.Value == transparency.Value);
-                if (conflict is not null)
-                {
-                    var feedback = new TransparencyUpdateModel(conflict);
-                    return Conflict(feedback);
-                }
-                Transparency t = transparency.GetTransparencyFromUpdateVM();
-                _db.Transparencies.Update(t);
-                await _db.SaveAsync();
+                var conflictingTransparency = await _mediator.Send(new ReadTransparencyQuery(x => x.Id != transparency.Id && x.Value == transparency.Value || x.Id != transparency.Id && x.Name == transparency.Name));
+                
+                if (conflictingTransparency is not null)
+                    return Conflict(new TransparencyUpdateModel(conflictingTransparency));
 
-                var productsAssociated = await _db.Products.GetProductsAssociatedWith(t);
-                if (productsAssociated.Count > 0)
-                {
-                    _db.Products.EvaluateProductPrices(productsAssociated);
-                    _db.Products.UpdateProductPrices(productsAssociated);
-                }
+                var updatedTransparency = await _mediator.Send(new UpdateTransparencyCommand(transparency));
 
+                if (updatedTransparency.Products.Count > 0)
+                    await _mediator.Send(new AdjustProductPricesCommand(x => x.Transparency.Id == updatedTransparency.Id));
+                
                 return Ok();
             }
             else
-            {
                 return BadRequest();
-            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteTransparency(int id)
         {
-            var transparency = await _db.Transparencies.GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "Products");
-
-            if (transparency is not null || transparency.Name == "Default")
-
+            var transparency = await _mediator.Send(new ReadTransparencyQuery(x => x.Id == id));
+            if (transparency is not null || transparency.Name is not "Default")
             {
                 if (transparency.Products?.Count > 0)
-                {
-                    await _db.Transparencies.CheckDefaultTransparencyAsync();
-                    await _db.Products.RebuildingProductsAsync(transparency);
-                }
-                _db.Transparencies.Remove(transparency);
-                await _db.SaveAsync();
+                    await _mediator.Send(new RemovedTransparencyUpdateProductsCommand(id));
+
+                var deletedTransparency = await _mediator.Send(new DeleteTransparencyCommand(id));
                 return Ok();
             }
             else
-            {
                 return BadRequest();
-            }
         }
     }
 }
