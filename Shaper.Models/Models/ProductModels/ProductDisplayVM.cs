@@ -31,7 +31,24 @@ namespace Shaper.Models.Models.ProductModels
         {
 
         }
-        
+
+        public ProductDisplayVM(ProductEntityModel product)
+        {
+            Id = product.Id;
+            Name = product.Name;
+            Description = product.Description;
+            Price = product.Price;
+            Artist = product.Artist;
+            Created = product.Created;
+            ColorId = product.ColorId;
+            Color = product.Color;
+            ShapeId = product.ShapeId;
+            Shape = product.Shape;
+            TransparencyId = product.TransparencyId;
+            Transparency = product.Transparency;
+        }
+
+
         public ProductDisplayVM(Product product)
         {
             Id = product.Id;

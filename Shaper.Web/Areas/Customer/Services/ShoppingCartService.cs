@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Shaper.Models.Entities;
 using Shaper.Models.Models.ShoppingCartModels;
-using Shaper.Web.ApiService.IService;
 using Shaper.Web.Areas.Customer.Services.IServices;
 using System.Net.Http.Headers;
 using System.Net.Http;

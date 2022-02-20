@@ -14,8 +14,10 @@ namespace Shaper.Models.Models.ProductModels
 {
     public class ProductModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Artist { get; set; }
+        public string Description{ get; set; }
         public DateTime Created { get; set; }
         public ColorComponentModel Color { get; set; }
         public ShapeComponentModel Shape { get; set; }
@@ -28,6 +30,7 @@ namespace Shaper.Models.Models.ProductModels
 
         public ProductModel(CartProduct product)
         {
+            Id = product.ProductId;
             Name = product.Product.Name;
             Artist = product.Product.Artist;
             Created = product.Product.Created;

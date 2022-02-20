@@ -13,7 +13,7 @@ using System.Data;
 namespace Shaper.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class TransparenciesController : ControllerBase
     {

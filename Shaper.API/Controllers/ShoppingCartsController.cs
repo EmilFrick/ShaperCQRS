@@ -15,7 +15,7 @@ using System.Data;
 namespace Shaper.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize(Roles = "Customer")]
+    [Authorize(Roles = "Customer")]
 
     [ApiController]
     public class ShoppingCartsController : ControllerBase

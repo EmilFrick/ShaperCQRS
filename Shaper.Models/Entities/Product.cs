@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Shaper.Models.Models.ProductComponentsModels;
 using Shaper.Models.Models.ProductModels;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace Shaper.Models.Entities
         [Required]
         public string Description { get; set; }
         [Required]
-        [Range(1,500)]
-        [Column(TypeName ="money")]
+        [Range(1, 500)]
+        [Column(TypeName = "money")]
         public double Price { get; set; }
         [Required]
         public string Artist { get; set; }
@@ -66,5 +67,7 @@ namespace Shaper.Models.Entities
             ShapeId = Model.ShapeId;
             TransparencyId = Model.TransparencyId;
         }
+
+
     }
 }

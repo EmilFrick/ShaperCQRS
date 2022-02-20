@@ -17,7 +17,7 @@ namespace Shaper.Utility
         private const string ShoppingCarts = $"{root}ShoppingCarts";
         private const string Orders = $"{root}Orders/";
         private const string OrdersPlace = $"{root}Orders/PlaceOrder";
-
+        private const string ProductsByColor = $"{root}Products/Colors/";
 
 
         public enum ApiPath
@@ -28,6 +28,7 @@ namespace Shaper.Utility
             Products,
             ProductsVM,
             ProductComponents,
+            ProductsByColor,
             ShoppingCartsAddItem,
             ShoppingCartsRemoveItem,
             ShoppingCarts,
@@ -74,6 +75,8 @@ namespace Shaper.Utility
                     return Orders;
                 case ApiPath.OrdersPlace:
                     return OrdersPlace;
+                case ApiPath.ProductsByColor:
+                    return ProductsByColor;
                 default:
                     return null;
             }

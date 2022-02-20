@@ -16,7 +16,7 @@ namespace Shaper.API.Controllers
 {
 
     [Route("api/[controller]")]
-    //[Authorize(Roles = "Artist")]
+    [Authorize(Roles = "Artist")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -92,7 +92,8 @@ namespace Shaper.API.Controllers
             if (result is null)
                 return NotFound();
 
-            return Ok(result);
+            var productModel = new ProductEntityModel(result);
+            return Ok(productModel);
         }
 
         [AllowAnonymous]
