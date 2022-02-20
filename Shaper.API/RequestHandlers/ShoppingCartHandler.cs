@@ -70,7 +70,6 @@ namespace Shaper.API.RequestHandlers
             return await _db.ShoppingCarts.GetFirstOrDefaultAsync(x => x.CustomerIdentity == user && x.CheckedOut == false, includeProperties: "CartProducts");
         }
 
-
         public async Task RemoveItemFromShoppingCartAsync(int cartId, int productId)
         {
             var itemToDelete = await _db.CartProducts.GetFirstOrDefaultAsync(a => a.ShoppingCartId == cartId && a.ProductId == productId);
