@@ -8,7 +8,6 @@ using Shaper.API.CQRS.ProductData.Handlers;
 using Shaper.API.CQRS.ProductData.Queries;
 using Shaper.API.CQRS.ShapeData.Queries;
 using Shaper.API.CQRS.TransparencyData.Queries;
-using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Entities;
 using Shaper.Models.Models.ProductComponentsModels;
 using Shaper.Models.Models.ProductModels;
@@ -69,7 +68,7 @@ namespace Shaper.API.Controllers
             var res = await _mediator.Send(new ReadProductComponentsQuery(request));
             if (res.ColorComponent is null || res.ShapeComponent is null || res.TransparencyComponent is null)
                 return NotFound();
-            
+
             return Ok(res);
         }
 
@@ -81,7 +80,7 @@ namespace Shaper.API.Controllers
             var result = await _mediator.Send(new ReadProductsQuery());
             if (result is null)
                 return NotFound();
-            
+
             return Ok(result);
         }
 
@@ -89,7 +88,38 @@ namespace Shaper.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var result = await _mediator.Send(new ReadProductQuery(p=>p.Id == id));
+            var result = await _mediator.Send(new ReadProductQuery(p => p.Id == id));
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Colors/{id:int}")]
+        public async Task<IActionResult> GetProductByColorId(int id)
+        {
+            var result = await _mediator.Send(new ReadProductsByColorIdQuery(id));
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpGet("Shapes/{id:int}")]
+        public async Task<IActionResult> GetProductByShapeId(int id)
+        {
+            var result = await _mediator.Send(new ReadProductsByShapeIdQuery(id));
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpGet("Transparencies/{id:int}")]
+        public async Task<IActionResult> GetProductByTransparencyId(int id)
+        {
+            var result = await _mediator.Send(new ReadProductsByTransparencyIdQuery(id));
             if (result is null)
                 return NotFound();
 
@@ -145,7 +175,7 @@ namespace Shaper.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var result = await _mediator.Send(new ReadProductQuery(p=>p.Id == id));
+            var result = await _mediator.Send(new ReadProductQuery(p => p.Id == id));
             if (result is null)
                 return BadRequest();
 

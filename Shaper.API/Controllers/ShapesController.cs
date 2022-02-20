@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shaper.API.CQRS.ShapeData.Commands;
 using Shaper.API.CQRS.ShapeData.Queries;
 using Shaper.API.CQRS.ProductData.Commands;
-using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Entities;
 using Shaper.Models.Models.ShapeModels;
 using Shaper.Models.Models.ShapeModels;

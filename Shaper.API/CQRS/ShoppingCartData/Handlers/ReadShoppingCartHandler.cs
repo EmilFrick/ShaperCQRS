@@ -17,7 +17,7 @@ namespace Shaper.API.CQRS.ShoppingCartData.Handlers
 
         public async Task<ShoppingCart> Handle(ReadShoppingCartQuery request, CancellationToken cancellationToken)
         {
-            return await _db.ShoppingCarts.Include(x => x.CartProducts).FirstOrDefaultAsync(request.filter);
+            return await _db.ShoppingCarts.Include(x => x.CartProducts).ThenInclude(y => y.Product).FirstOrDefaultAsync(request.filter);
         }
     }
 }

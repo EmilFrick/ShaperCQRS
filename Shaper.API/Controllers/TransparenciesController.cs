@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shaper.API.CQRS.TransparencyData.Commands;
 using Shaper.API.CQRS.TransparencyData.Queries;
 using Shaper.API.CQRS.ProductData.Commands;
-using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Entities;
 using Shaper.Models.Models.TransparencyModels;
 using Shaper.Models.Models.TransparencyModels;
@@ -18,13 +17,11 @@ namespace Shaper.API.Controllers
     [ApiController]
     public class TransparenciesController : ControllerBase
     {
-        private readonly IUnitOfWork _db;
         private readonly IMediator _mediator;
 
 
-        public TransparenciesController(IUnitOfWork db, IMediator mediator)
+        public TransparenciesController(IMediator mediator)
         {
-            _db = db;
             _mediator = mediator;
         }
 

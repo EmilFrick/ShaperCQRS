@@ -7,8 +7,6 @@ using Shaper.API.CQRS.ColorData.Commands;
 using Shaper.API.CQRS.ColorData.Queries;
 using Shaper.API.CQRS.ProductData.Commands;
 using Shaper.DataAccess.Context;
-using Shaper.DataAccess.Repo;
-using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Entities;
 using Shaper.Models.Models.ColorModels;
 using System.Data;

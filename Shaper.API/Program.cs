@@ -2,18 +2,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Shaper.API.AuthenticationOptions;
 using Shaper.API.CQRS;
-using Shaper.API.RequestHandlers;
-using Shaper.API.RequestHandlers.IRequestHandlers;
 using Shaper.DataAccess.Context;
-using Shaper.DataAccess.Repo;
-using Shaper.DataAccess.Repo.IRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IRequestHandler, RequestHandler>();
 builder.Services.AddMediatR(typeof(MediatREntryPoint).Assembly);
 builder.Services.AddControllers();
 

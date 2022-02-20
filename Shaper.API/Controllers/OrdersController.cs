@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shaper.API.CQRS.ColorData.Queries;
 using Shaper.API.CQRS.OrderData.Commands;
 using Shaper.API.CQRS.OrderData.Queries;
-using Shaper.API.RequestHandlers.IRequestHandlers;
-using Shaper.DataAccess.Repo.IRepo;
 using Shaper.Models.Models.OrderModels;
 
 namespace Shaper.API.Controllers
@@ -14,12 +12,10 @@ namespace Shaper.API.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IRequestHandler _requestHandler;
         private readonly IMediator _mediator;
 
-        public OrdersController(IRequestHandler requestHandler, IMediator mediator)
+        public OrdersController(IMediator mediator)
         {
-            _requestHandler = requestHandler;
             _mediator = mediator;
         }
 
@@ -55,7 +51,7 @@ namespace Shaper.API.Controllers
             if (userShoppingCart is null || userShoppingCart.CartProducts.Count is 0)
                 return NotFound(new { message = "User does not have a shopping cart to process." });
             
-            var order = _mediator.Send(new CreateOrderCommand(userShoppingCart));
+            var order = await _mediator.Send(new CreateOrderCommand(userShoppingCart));
             return Ok(order);
         }
 

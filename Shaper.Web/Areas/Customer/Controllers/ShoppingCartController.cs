@@ -45,8 +45,7 @@ namespace Shaper.Web.Areas.Customer.Controllers
             return RedirectToRoute(new
             {
                 controller = "CustomerProducts",
-                action = "Details",
-                id = addingProduct.Id
+                action = "Index"
             });
         }
 
